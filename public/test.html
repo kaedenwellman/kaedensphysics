@@ -94,7 +94,11 @@
 
         // Test 9: Very light mass (10g) @ 170°
         const test9 = predictRange(170, 10);
-        test('10g @ 170° ≈ 195 inches', test9.rangeInches, 195, 5.0);
+        test('10g @ 170° ≈ 173 inches', test9.rangeInches, 173, 2.0);
+
+        // Test 9b: Extremely light mass (3g) @ 170°
+        const test9b = predictRange(170, 3);
+        test('3g @ 170° ≈ 28 inches', test9b.rangeInches, 28, 2.0);
 
         // Test 10: Heavy mass (70g) @ 170°
         const test10 = predictRange(170, 70);

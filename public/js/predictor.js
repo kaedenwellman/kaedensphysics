@@ -174,8 +174,8 @@ function quickPredict() {
     const angle = parseFloat(document.getElementById('quick-angle').value);
 
     // Validation
-    if (isNaN(mass) || mass < 5 || mass > 100) {
-        alert('Please enter a valid mass between 5 and 100 grams');
+    if (isNaN(mass) || mass < 3 || mass > 100) {
+        alert('Please enter a valid mass between 3 and 100 grams');
         return;
     }
 
@@ -211,8 +211,8 @@ function generateTable() {
     const step = parseInt(document.getElementById('table-step').value);
 
     // Validation
-    if (isNaN(mass) || mass < 5 || mass > 100) {
-        alert('Please enter a valid mass between 5 and 100 grams');
+    if (isNaN(mass) || mass < 3 || mass > 100) {
+        alert('Please enter a valid mass between 3 and 100 grams');
         return;
     }
 
@@ -280,8 +280,8 @@ function addCompetitionPrediction() {
     const mass = parseFloat(document.getElementById('comp-mass').value);
 
     // Validation
-    if (isNaN(mass) || mass < 5 || mass > 100) {
-        alert('Please enter a valid mass between 5 and 100 grams');
+    if (isNaN(mass) || mass < 3 || mass > 100) {
+        alert('Please enter a valid mass between 3 and 100 grams');
         return;
     }
 

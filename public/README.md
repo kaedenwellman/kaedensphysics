@@ -21,6 +21,7 @@ Based on empirical calibration:
 - Reference mass (66.8g): ±0-2 inches
 - Similar masses (50-80g): ±2-4 inches
 - Light masses (10-30g): ±3-6 inches
+- Very light masses (3-10g): ±5-15 inches (drag effects highly significant)
 
 ## 🧪 Testing
 

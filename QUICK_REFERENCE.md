@@ -28,7 +28,10 @@ python projectile_predictor_v2.py
 
 | Mass  | Predicted Range |
 |-------|-----------------|
-| 10g   | 195 in (16.3 ft)|
+| 3g    | 28 in (2.4 ft)  |
+| 5g    | 95 in (7.9 ft)  |
+| 7g    | 142 in (11.8 ft)|
+| 10g   | 173 in (14.5 ft)|
 | 12.5g | 180 in (15.0 ft)|
 | 15g   | 167 in (13.9 ft)|
 | 19.3g | 169 in (14.1 ft)|
@@ -83,11 +86,14 @@ v_new = v_ref × √(66.8 / mass_new)
 - 170° → Δθ = 35° (MAX)
 
 ### Mass Categories
-- **Very Light (10-15g)**: ~180" at max
-- **Light (15-25g)**: ~140-160" at max
-- **Medium (25-40g)**: ~100-130" at max
-- **Medium-Heavy (40-55g)**: ~85-100" at max
-- **Heavy (55-70g)**: ~75-90" at max
+- **Extremely Light (3-7g)**: ~28-142" at max (drag-dominated, range DECREASES below ~12g)
+- **Optimal (10-15g)**: ~167-180" at max (best range, drag vs. velocity balance)
+- **Light (15-25g)**: ~145-169" at max
+- **Medium (25-40g)**: ~110-145" at max
+- **Medium-Heavy (40-55g)**: ~95-110" at max
+- **Heavy (55-70g)**: ~81-95" at max
+
+**Note:** Maximum range occurs around 12-13g. Lighter masses have SHORTER range due to air resistance!
 
 ## 🎓 Competition Strategy
 
@@ -148,15 +154,17 @@ pip install numpy scipy matplotlib
 
 | Mass Range | Expected Accuracy |
 |------------|-------------------|
-| 10-30g     | ±4 inches         |
+| 3-10g      | ±5-15 inches (drag effects very significant) |
+| 10-30g     | ±4-6 inches       |
 | 30-50g     | ±3 inches         |
 | 50-70g     | ±2 inches         |
 
 ## 🎯 Optimal Settings for Maximum Range
 
 - **Angle**: 170° (maximum deflection)
-- **Mass**: Lighter is better, but drag limits gains below ~12g
-- **Sweet spot**: 15-25g range for best distance
+- **Optimal Mass**: 12-13g (absolute maximum range ~180")
+- **Mass Note**: Going lighter than 12g REDUCES range due to drag!
+- **Practical Range**: 10-25g gives good performance (167-180" range)
 
 ## 💡 Pro Tips
 
@@ -165,6 +173,7 @@ pip install numpy scipy matplotlib
 3. **Round conservatively** - Better to be slightly under than over
 4. **Account for wear** - Spring weakens over time, may need recalibration
 5. **Temperature matters** - Cold conditions slightly reduce range
+6. **Very light masses (3-7g)** - Predictions less accurate due to high drag sensitivity; test if possible
 
 ## 📞 Emergency Backup Predictions
 
