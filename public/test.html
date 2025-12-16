@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictor Test Suite</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+        }
+        .test { margin: 10px 0; padding: 10px; background: #2d2d2d; border-radius: 4px; }
+        .pass { border-left: 4px solid #4ec9b0; }
+        .fail { border-left: 4px solid #f48771; }
+        h1 { color: #4ec9b0; }
+        h2 { color: #569cd6; margin-top: 20px; }
+        .summary { margin-top: 20px; padding: 15px; background: #2d2d2d; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Projectile Predictor Test Suite</h1>
+    <div id="results"></div>
+    <div class="summary" id="summary"></div>
+
+    <script src="js/predictor.js"></script>
+    <script>
+        const results = document.getElementById('results');
+        const summary = document.getElementById('summary');
+        let passed = 0;
+        let failed = 0;
+
+        function test(name, actual, expected, tolerance = 0.5) {
+            const diff = Math.abs(actual - expected);
+            const pass = diff <= tolerance;
+
+            if (pass) passed++;
+            else failed++;
+
+            const div = document.createElement('div');
+            div.className = `test ${pass ? 'pass' : 'fail'}`;
+            div.innerHTML = `
+                <strong>${pass ? '✓' : '✗'} ${name}</strong><br>
+                Expected: ${expected.toFixed(2)} | Actual: ${actual.toFixed(2)} | Diff: ${diff.toFixed(2)}
+            `;
+            results.appendChild(div);
+
+            return pass;
+        }
+
+        // Test Cases Based on Python Calibration Data
+        console.log('Running test suite...');
+
+        results.innerHTML = '<h2>Reference Mass (66.8g) Tests</h2>';
+
+        // Test 1: 66.8g @ 155° should be ~50 inches
+        const test1 = predictRange(155, 66.8);
+        test('66.8g @ 155° = 50 inches', test1.rangeInches, 50.0, 1.0);
+
+        // Test 2: 66.8g @ 165° should be ~78 inches
+        const test2 = predictRange(165, 66.8);
+        test('66.8g @ 165° = 78 inches', test2.rangeInches, 78.0, 1.0);
+
+        // Test 3: 66.8g @ 170° should be ~93 inches
+        const test3 = predictRange(170, 66.8);
+        test('66.8g @ 170° = 93 inches', test3.rangeInches, 93.0, 1.0);
+
+        results.innerHTML += '<h2>Light Mass (12.5g) Tests</h2>';
+
+        // Test 4: 12.5g @ 170° should be ~180 inches
+        const test4 = predictRange(170, 12.5);
+        test('12.5g @ 170° = 180 inches', test4.rangeInches, 180.0, 2.0);
+
+        results.innerHTML += '<h2>19.3g Predictions</h2>';
+
+        // Test 5: 19.3g @ 140° should be ~27 inches
+        const test5 = predictRange(140, 19.3);
+        test('19.3g @ 140° ≈ 27 inches', test5.rangeInches, 26.5, 2.0);
+
+        // Test 6: 19.3g @ 165° should be ~142 inches
+        const test6 = predictRange(165, 19.3);
+        test('19.3g @ 165° ≈ 142 inches', test6.rangeInches, 142.3, 2.0);
+
+        // Test 7: 19.3g @ 170° should be ~169 inches
+        const test7 = predictRange(170, 19.3);
+        test('19.3g @ 170° ≈ 169 inches', test7.rangeInches, 169.0, 2.0);
+
+        results.innerHTML += '<h2>Edge Cases</h2>';
+
+        // Test 8: Angle at relaxed position should give 0
+        const test8 = predictRange(135, 50);
+        test('135° (relaxed) = 0 inches', test8.rangeInches, 0, 0.1);
+
+        // Test 9: Very light mass (10g) @ 170°
+        const test9 = predictRange(170, 10);
+        test('10g @ 170° ≈ 195 inches', test9.rangeInches, 195, 5.0);
+
+        // Test 10: Heavy mass (70g) @ 170°
+        const test10 = predictRange(170, 70);
+        test('70g @ 170° ≈ 81 inches', test10.rangeInches, 81, 5.0);
+
+        results.innerHTML += '<h2>Physics Validation</h2>';
+
+        // Test 11: Velocity should increase as mass decreases (at same angle)
+        const heavy = predictRange(165, 50);
+        const light = predictRange(165, 20);
+        test('Lighter mass has higher velocity', light.velocity > heavy.velocity ? 1 : 0, 1, 0.1);
+
+        // Test 12: Range should increase with angle (for same mass)
+        const low = predictRange(150, 30);
+        const high = predictRange(165, 30);
+        test('Higher angle gives longer range', high.rangeInches > low.rangeInches ? 1 : 0, 1, 0.1);
+
+        // Summary
+        const total = passed + failed;
+        const percentage = ((passed / total) * 100).toFixed(1);
+
+        summary.innerHTML = `
+            <h2>Test Summary</h2>
+            <strong>Total Tests:</strong> ${total}<br>
+            <strong style="color: #4ec9b0;">Passed:</strong> ${passed}<br>
+            <strong style="color: #f48771;">Failed:</strong> ${failed}<br>
+            <strong>Success Rate:</strong> ${percentage}%<br><br>
+            ${failed === 0 ? '🎉 All tests passed! The predictor is working correctly.' : '⚠️ Some tests failed. Review the output above.'}
+        `;
+
+        console.log(`Test Results: ${passed}/${total} passed (${percentage}%)`);
+    </script>
+</body>
+</html>

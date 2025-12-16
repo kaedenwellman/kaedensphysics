@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projectile Range Predictor - Torsion Spring Launcher</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 Projectile Range Predictor</h1>
+            <p class="subtitle">Torsion Spring Launcher Physics Calculator</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('quick')">Quick Prediction</button>
+            <button class="tab-button" onclick="showTab('table')">Prediction Table</button>
+            <button class="tab-button" onclick="showTab('competition')">Competition Mode</button>
+            <button class="tab-button" onclick="showTab('info')">Info</button>
+        </div>
+
+        <!-- Quick Prediction Tab -->
+        <div id="quick-tab" class="tab-content active">
+            <div class="card">
+                <h2>Quick Prediction</h2>
+                <p>Enter the projectile mass and cocked angle to get instant range prediction.</p>
+
+                <div class="input-group">
+                    <label for="quick-mass">Projectile Mass (grams)</label>
+                    <input type="number" id="quick-mass" placeholder="e.g., 19.3" step="0.1" min="5" max="100" value="19.3">
+                </div>
+
+                <div class="input-group">
+                    <label for="quick-angle">Cocked Angle (degrees)</label>
+                    <input type="number" id="quick-angle" placeholder="e.g., 165" step="1" min="136" max="170" value="165">
+                    <small>Range: 136° to 170° (Relaxed position is 135°)</small>
+                </div>
+
+                <button class="btn-primary" onclick="quickPredict()">Calculate Range</button>
+
+                <div id="quick-result" class="result-box" style="display: none;">
+                    <h3>Prediction Results</h3>
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <span class="result-label">Mass:</span>
+                            <span class="result-value" id="result-mass">-</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Cocked Angle:</span>
+                            <span class="result-value" id="result-angle">-</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Spring Deflection (Δθ):</span>
+                            <span class="result-value" id="result-deflection">-</span>
+                        </div>
+                        <div class="result-item highlight">
+                            <span class="result-label">Predicted Range:</span>
+                            <span class="result-value" id="result-range-in">-</span>
+                        </div>
+                        <div class="result-item highlight">
+                            <span class="result-label">Range (feet):</span>
+                            <span class="result-value" id="result-range-ft">-</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Launch Velocity:</span>
+                            <span class="result-value" id="result-velocity">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prediction Table Tab -->
+        <div id="table-tab" class="tab-content">
+            <div class="card">
+                <h2>Prediction Table</h2>
+                <p>Generate a range table for a specific mass across multiple angles.</p>
+
+                <div class="input-group">
+                    <label for="table-mass">Projectile Mass (grams)</label>
+                    <input type="number" id="table-mass" placeholder="e.g., 19.3" step="0.1" min="5" max="100" value="19.3">
+                </div>
+
+                <div class="controls-row">
+                    <div class="input-group">
+                        <label for="table-start">Start Angle</label>
+                        <input type="number" id="table-start" value="140" min="136" max="170">
+                    </div>
+                    <div class="input-group">
+                        <label for="table-end">End Angle</label>
+                        <input type="number" id="table-end" value="170" min="136" max="170">
+                    </div>
+                    <div class="input-group">
+                        <label for="table-step">Step</label>
+                        <input type="number" id="table-step" value="5" min="1" max="10">
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="generateTable()">Generate Table</button>
+
+                <div id="table-result" style="display: none;">
+                    <h3>Prediction Table for <span id="table-mass-display">-</span>g</h3>
+                    <div class="table-container">
+                        <table id="prediction-table">
+                            <thead>
+                                <tr>
+                                    <th>Angle</th>
+                                    <th>Δθ</th>
+                                    <th>Velocity</th>
+                                    <th>Range (in)</th>
+                                    <th>Range (ft)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                    <button class="btn-secondary" onclick="downloadTable()">Download CSV</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Competition Mode Tab -->
+        <div id="competition-tab" class="tab-content">
+            <div class="card">
+                <h2>Competition Mode</h2>
+                <p>Rapid predictions for multiple masses at maximum angle (170°)</p>
+
+                <div class="competition-input">
+                    <div class="input-group">
+                        <label for="comp-mass">Enter Mass (grams)</label>
+                        <input type="number" id="comp-mass" placeholder="e.g., 25.0" step="0.1" min="5" max="100">
+                    </div>
+                    <button class="btn-primary" onclick="addCompetitionPrediction()">Add Prediction</button>
+                    <button class="btn-secondary" onclick="clearCompetition()">Clear All</button>
+                </div>
+
+                <div id="competition-results">
+                    <h3>Competition Results (@ 170°)</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Mass (g)</th>
+                                    <th>Range (inches)</th>
+                                    <th>Range (feet)</th>
+                                    <th>Velocity (m/s)</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="competition-body">
+                                <tr class="empty-state">
+                                    <td colspan="5">No predictions yet. Add masses above to start.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Tab -->
+        <div id="info-tab" class="tab-content">
+            <div class="card">
+                <h2>About This Calculator</h2>
+
+                <div class="info-section">
+                    <h3>Physics Model</h3>
+                    <p>This calculator uses a <strong>hybrid empirical-physics model</strong> calibrated from experimental data:</p>
+                    <ul>
+                        <li><strong>Reference Mass Model (66.8g):</strong> R(Δθ) = 0.0133×(Δθ)² + 2.133×(Δθ) + 2.0</li>
+                        <li><strong>Mass Scaling:</strong> Launch velocity scales as v ∝ √(m_ref/m_new)</li>
+                        <li><strong>Drag Correction:</strong> Factor of 0.8246 calibrated from light mass data</li>
+                        <li><strong>Launch Angle:</strong> Effective angle of 55° from horizontal</li>
+                    </ul>
+                </div>
+
+                <div class="info-section">
+                    <h3>Launcher Specifications</h3>
+                    <ul>
+                        <li><strong>Lever Arm:</strong> 9.2 inches</li>
+                        <li><strong>Launch Height:</strong> 11 inches above ground</li>
+                        <li><strong>Relaxed Position:</strong> 135° from horizontal</li>
+                        <li><strong>Operating Range:</strong> 136° to 170° (max)</li>
+                        <li><strong>Spring Deflection:</strong> Δθ = Cocked_Angle - 135°</li>
+                    </ul>
+                </div>
+
+                <div class="info-section">
+                    <h3>Calibration Data</h3>
+                    <p><strong>Reference Mass (66.8g):</strong></p>
+                    <ul>
+                        <li>155° → 50 inches</li>
+                        <li>165° → 78 inches</li>
+                        <li>170° → 93 inches</li>
+                    </ul>
+                    <p><strong>Light Mass Verification (12.5g @ 170°):</strong> 180 inches</p>
+                </div>
+
+                <div class="info-section">
+                    <h3>Accuracy</h3>
+                    <ul>
+                        <li><strong>Reference mass (66.8g):</strong> ±0-2 inches</li>
+                        <li><strong>Similar masses (50-80g):</strong> ±2-4 inches</li>
+                        <li><strong>Light masses (10-30g):</strong> ±3-6 inches</li>
+                    </ul>
+                </div>
+
+                <div class="info-section">
+                    <h3>How to Use</h3>
+                    <ol>
+                        <li><strong>Quick Prediction:</strong> Enter mass and angle for instant results</li>
+                        <li><strong>Prediction Table:</strong> Generate a range table for a specific mass</li>
+                        <li><strong>Competition Mode:</strong> Rapid testing for multiple masses at max angle</li>
+                    </ol>
+                </div>
+
+                <div class="info-section">
+                    <h3>Tips</h3>
+                    <ul>
+                        <li>Weigh projectiles accurately (±0.1g precision recommended)</li>
+                        <li>Verify cocked angle is consistent and measured correctly</li>
+                        <li>For competition, use Competition Mode for fastest predictions</li>
+                        <li>The 170° setting typically gives maximum range</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Physics Extra Credit Project | Torsion Spring Launcher Range Predictor</p>
+            <p><small>Model calibrated with RMSE: 0.00 inches | Accuracy: ±2-6 inches typical</small></p>
+        </footer>
+    </div>
+
+    <script src="js/predictor.js"></script>
+</body>
+</html>
