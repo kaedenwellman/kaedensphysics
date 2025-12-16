@@ -213,9 +213,6 @@ function quickPredict() {
         `${result.rangeCentimeters.toFixed(1)} cm (${result.rangeMeters.toFixed(2)} m)`;
     document.getElementById('result-velocity').textContent =
         `${result.velocity.toFixed(2)} m/s (${result.velocityKmh.toFixed(1)} km/h)`;
-    document.getElementById('result-height').textContent =
-        `${result.maxHeightInches.toFixed(1)} in (${result.maxHeightCentimeters.toFixed(1)} cm)`;
-    document.getElementById('result-time').textContent = `${result.timeOfFlight.toFixed(3)} s`;
 
     document.getElementById('quick-result').style.display = 'block';
 
