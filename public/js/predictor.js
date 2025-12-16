@@ -82,8 +82,16 @@ function predictRange(cockedAngleDeg, massGrams) {
             deltaTheta: deltaTheta,
             mass: massGrams,
             velocity: 0,
+            velocityFps: 0,
+            velocityKmh: 0,
+            rangeMeters: 0,
+            rangeCentimeters: 0,
             rangeInches: 0,
-            rangeFeet: 0
+            rangeFeet: 0,
+            maxHeightMeters: 0,
+            maxHeightCentimeters: 0,
+            maxHeightInches: 0,
+            timeOfFlight: 0
         };
     }
 
@@ -117,15 +125,23 @@ function predictRange(cockedAngleDeg, massGrams) {
     // Convert to inches
     const rangeInches = rangeMeters / LAUNCHER.INCHES_TO_METERS;
 
+    // Calculate max height
+    const maxHeightMeters = heightMeters + (v0Sin * v0Sin) / (2 * LAUNCHER.G_METRIC);
+
     return {
         cockedAngle: cockedAngleDeg,
         deltaTheta: deltaTheta,
         mass: massGrams,
         velocity: v0,
         velocityFps: v0 / 0.3048,
+        velocityKmh: v0 * 3.6,
         rangeMeters: rangeMeters,
+        rangeCentimeters: rangeMeters * 100,
         rangeInches: rangeInches,
         rangeFeet: rangeInches / 12,
+        maxHeightMeters: maxHeightMeters,
+        maxHeightCentimeters: maxHeightMeters * 100,
+        maxHeightInches: maxHeightMeters / LAUNCHER.INCHES_TO_METERS,
         timeOfFlight: timeOfFlight
     };
 }
@@ -191,9 +207,15 @@ function quickPredict() {
     document.getElementById('result-mass').textContent = `${mass.toFixed(1)}g`;
     document.getElementById('result-angle').textContent = `${angle.toFixed(0)}°`;
     document.getElementById('result-deflection').textContent = `${result.deltaTheta.toFixed(0)}°`;
-    document.getElementById('result-range-in').textContent = `${result.rangeInches.toFixed(1)} inches`;
-    document.getElementById('result-range-ft').textContent = `${result.rangeFeet.toFixed(2)} feet`;
-    document.getElementById('result-velocity').textContent = `${result.velocity.toFixed(2)} m/s`;
+    document.getElementById('result-range-imperial').textContent =
+        `${result.rangeInches.toFixed(1)} in (${result.rangeFeet.toFixed(2)} ft)`;
+    document.getElementById('result-range-metric').textContent =
+        `${result.rangeCentimeters.toFixed(1)} cm (${result.rangeMeters.toFixed(2)} m)`;
+    document.getElementById('result-velocity').textContent =
+        `${result.velocity.toFixed(2)} m/s (${result.velocityKmh.toFixed(1)} km/h)`;
+    document.getElementById('result-height').textContent =
+        `${result.maxHeightInches.toFixed(1)} in (${result.maxHeightCentimeters.toFixed(1)} cm)`;
+    document.getElementById('result-time').textContent = `${result.timeOfFlight.toFixed(3)} s`;
 
     document.getElementById('quick-result').style.display = 'block';
 
@@ -233,9 +255,9 @@ function generateTable() {
         row.innerHTML = `
             <td>${result.cockedAngle.toFixed(0)}°</td>
             <td>${result.deltaTheta.toFixed(0)}°</td>
-            <td>${result.velocity.toFixed(2)} m/s</td>
-            <td>${result.rangeInches.toFixed(1)}</td>
-            <td>${result.rangeFeet.toFixed(2)}</td>
+            <td>${result.velocity.toFixed(2)} m/s<br><small>${result.velocityKmh.toFixed(1)} km/h</small></td>
+            <td>${result.rangeInches.toFixed(1)} in<br><small>${result.rangeFeet.toFixed(2)} ft</small></td>
+            <td>${result.rangeCentimeters.toFixed(1)} cm<br><small>${result.rangeMeters.toFixed(2)} m</small></td>
         `;
     });
 
@@ -256,10 +278,10 @@ function downloadTable() {
         return;
     }
 
-    let csv = 'Angle (deg),Delta Theta (deg),Velocity (m/s),Range (inches),Range (feet)\n';
+    let csv = 'Angle (deg),Delta Theta (deg),Velocity (m/s),Velocity (km/h),Range (in),Range (ft),Range (cm),Range (m)\n';
 
     window.currentTableResults.forEach(result => {
-        csv += `${result.cockedAngle},${result.deltaTheta},${result.velocity.toFixed(2)},${result.rangeInches.toFixed(1)},${result.rangeFeet.toFixed(2)}\n`;
+        csv += `${result.cockedAngle},${result.deltaTheta},${result.velocity.toFixed(2)},${result.velocityKmh.toFixed(1)},${result.rangeInches.toFixed(1)},${result.rangeFeet.toFixed(2)},${result.rangeCentimeters.toFixed(1)},${result.rangeMeters.toFixed(2)}\n`;
     });
 
     const blob = new Blob([csv], { type: 'text/csv' });
@@ -318,9 +340,9 @@ function updateCompetitionTable() {
         const row = tbody.insertRow();
         row.innerHTML = `
             <td>${result.mass.toFixed(1)}</td>
-            <td>${result.rangeInches.toFixed(1)}</td>
-            <td>${result.rangeFeet.toFixed(2)}</td>
-            <td>${result.velocity.toFixed(2)}</td>
+            <td>${result.rangeInches.toFixed(1)} in<br><small>${result.rangeFeet.toFixed(2)} ft</small></td>
+            <td>${result.rangeCentimeters.toFixed(1)} cm<br><small>${result.rangeMeters.toFixed(2)} m</small></td>
+            <td>${result.velocity.toFixed(2)} m/s<br><small>${result.velocityKmh.toFixed(1)} km/h</small></td>
             <td><button class="btn-remove" onclick="removeCompetitionResult(${index})">Remove</button></td>
         `;
     });
