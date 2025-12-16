@@ -179,22 +179,32 @@
                 <div class="info-section">
                     <h3>Physics Model</h3>
                     <p>This calculator uses a <strong>hybrid empirical-physics model</strong> calibrated from experimental data:</p>
+
+                    <p><strong>Reference Mass Equation (66.8g):</strong></p>
                     <ul>
-                        <li><strong>Reference Mass Model (66.8g):</strong> R(Δθ) = 0.0133×(Δθ)² + 2.133×(Δθ) + 2.0</li>
+                        <li><strong>Imperial:</strong> R(inches) = 0.0133×(Δθ)² + 2.133×(Δθ) + 2.0</li>
+                        <li><strong>Metric:</strong> R(cm) = 0.338×(Δθ)² + 5.418×(Δθ) + 5.08</li>
+                        <li>Where Δθ = spring deflection angle in degrees</li>
+                    </ul>
+
+                    <p><strong>Key Physics Principles:</strong></p>
+                    <ul>
                         <li><strong>Mass Scaling:</strong> Launch velocity scales as v ∝ √(m_ref/m_new)</li>
                         <li><strong>Drag Correction:</strong> Factor of 0.8246 calibrated from light mass data</li>
                         <li><strong>Launch Angle:</strong> Effective angle of 55° from horizontal</li>
+                        <li><strong>Energy Storage:</strong> E = ½k(Δθ)² (torsion spring)</li>
                     </ul>
                 </div>
 
                 <div class="info-section">
                     <h3>Launcher Specifications</h3>
                     <ul>
-                        <li><strong>Lever Arm:</strong> 9.2 inches</li>
-                        <li><strong>Launch Height:</strong> 11 inches above ground</li>
+                        <li><strong>Lever Arm:</strong> 9.2 inches (23.4 cm)</li>
+                        <li><strong>Launch Height:</strong> 11 inches (27.9 cm) above ground</li>
                         <li><strong>Relaxed Position:</strong> 135° from horizontal</li>
                         <li><strong>Operating Range:</strong> 136° to 170° (max)</li>
                         <li><strong>Spring Deflection:</strong> Δθ = Cocked_Angle - 135°</li>
+                        <li><strong>Gravity:</strong> 386.1 in/s² (9.81 m/s²)</li>
                     </ul>
                 </div>
 
@@ -202,20 +212,23 @@
                     <h3>Calibration Data</h3>
                     <p><strong>Reference Mass (66.8g):</strong></p>
                     <ul>
-                        <li>155° → 50 inches</li>
-                        <li>165° → 78 inches</li>
-                        <li>170° → 93 inches</li>
+                        <li>155° (Δθ=20°) → 50 inches (127 cm)</li>
+                        <li>165° (Δθ=30°) → 78 inches (198 cm)</li>
+                        <li>170° (Δθ=35°) → 93 inches (236 cm)</li>
                     </ul>
-                    <p><strong>Light Mass Verification (12.5g @ 170°):</strong> 180 inches</p>
+                    <p><strong>Light Mass Verification (12.5g @ 170°):</strong></p>
+                    <ul>
+                        <li>180 inches (457 cm, 4.57 m)</li>
+                    </ul>
                 </div>
 
                 <div class="info-section">
                     <h3>Accuracy</h3>
                     <ul>
-                        <li><strong>Reference mass (66.8g):</strong> ±0-2 inches</li>
-                        <li><strong>Similar masses (50-80g):</strong> ±2-4 inches</li>
-                        <li><strong>Light masses (10-30g):</strong> ±3-6 inches</li>
-                        <li><strong>Very light masses (3-10g):</strong> ±5-10 inches (drag effects significant)</li>
+                        <li><strong>Reference mass (66.8g):</strong> ±0-2 inches (±0-5 cm)</li>
+                        <li><strong>Similar masses (50-80g):</strong> ±2-4 inches (±5-10 cm)</li>
+                        <li><strong>Light masses (10-30g):</strong> ±3-6 inches (±8-15 cm)</li>
+                        <li><strong>Very light masses (3-10g):</strong> ±5-10 inches (±13-25 cm) - drag effects significant</li>
                     </ul>
                 </div>
 
