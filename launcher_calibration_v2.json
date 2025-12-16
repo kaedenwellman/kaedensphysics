@@ -1,0 +1,30 @@
+{
+  "poly_coeffs": [
+    0.013333333333333334,
+    2.1333333333333333,
+    2.0
+  ],
+  "drag_factor": 0.8245776994364388,
+  "launch_angle_deg": 55.0,
+  "ref_mass": 66.8,
+  "calibration_results": {
+    "poly_coeffs": [
+      0.013333333333333334,
+      2.1333333333333333,
+      2.0
+    ],
+    "drag_factor": 0.8245776994364388,
+    "launch_angle_deg": 55.0,
+    "rmse_inches": 0.0,
+    "predictions": [
+      50.0,
+      78.0,
+      93.0
+    ],
+    "errors": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  }
+}

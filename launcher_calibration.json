@@ -1,0 +1,24 @@
+{
+  "k_torsion": 2.587883278797349,
+  "launch_angle_deg": 61.40235225151511,
+  "drag_coefficient": 0.8,
+  "projectile_diameter_m": 0.025,
+  "energy_efficiency": 0.7,
+  "calibration_results": {
+    "k_torsion": 2.587883278797349,
+    "launch_angle_deg": 61.40235225151511,
+    "drag_coefficient": 0.8,
+    "rmse_inches": 35.40191449396716,
+    "predictions": [
+      20.565959197564478,
+      40.97631105699418,
+      53.97730982355784
+    ],
+    "errors": [
+      -29.434040802435522,
+      -37.02368894300582,
+      -39.02269017644216
+    ],
+    "calibration_mass_g": 66.8
+  }
+}
